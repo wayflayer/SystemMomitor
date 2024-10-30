@@ -1,6 +1,6 @@
 # SystemMonitor pet-project
 
-Simple Linux-system monitor
+Simple Linux-system monitor (V. 0.01)
 
 the output reads:
 CPU load information
