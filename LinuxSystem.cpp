@@ -73,67 +73,50 @@ void CPU::showStatus(){
     cout << "CPU load: " << usage << "%" << endl;
 }
 
-string Memory::getMemInfo() {
-    ifstream meminfo("/proc/meminfo");
-    string line;
-    string memInfo;
+Memory::Memory(const string& Mem) : SystemComponent(Mem), total(0.0), usage(0.0), free(0.0) {
+        getMemInfo();
+        usage = getUsageInfo();
+        free = total - usage; // Изменил расчет free
+    }
 
-    while (getline(meminfo, line)) {
-        if (line.find("MemTotal") != string::npos) {
+string Memory::getMemInfo() {
+        ifstream meminfo("/proc/meminfo");
+        string line;
+        string memInfo;
+
+        while (getline(meminfo, line)) {
+            if (line.find("MemTotal") != string::npos) {
+                istringstream iss(line);
+                string key, value;
+                iss >> key >> value;
+                total = stod(value) / 1024 / 1024; //  Добавил деление на 1024/1024 
+            } 
+            else if (line.find("MemFree") != string::npos) {
             istringstream iss(line);
-            string key, value;
+             string key, value;
             iss >> key >> value;
-            total = stod(value);
-        } else if (line.find("MemFree") != string::npos) {
-            istringstream iss(line);
-            string key, value;
-            iss >> key >> value;
-            free = (stod(value)) / 1024 / 1024;
+            free = stod(value) / 1024 / 1024; //  Добавил деление на 1024/1024 
         }
     }
-    return memInfo ;
+    return memInfo;
 }
 
-double Memory::getUsageInfo(){
-    usage = ((total - free) / 1024 / 1024);
+double Memory::getUsageInfo() {
+    usage = (total - free); // Изменил расчет usage 
     return usage;
 }
 
-Memory::Memory(const string& Mem):
-SystemComponent(Mem),
-total(0.0),
-usage(0.0),
-free(0.0)
-{
-    getMemInfo();
-    usage = getUsageInfo();
-    free = (total - usage) / 1024 / 1024 ;
-}
+double Memory::getTotal() const { return total; }
+double Memory::getUsage() const { return usage; }
+double Memory::getFree() const { return free; }
 
-string Memory::getMemory() const {
-    return name;
-}
-
-double Memory::getTotal() const {
-    return total;
-}
-
-double Memory::getUsage() const {
-    return usage;
-}
-
-double Memory::getFree() const {
-    return free;
-}
-
-void Memory::showStatus(){
+void Memory::showStatus() {
     cout << endl;
     cout << getName() << endl;
     cout << "Total Size: " << setprecision(2) << getTotal() << " Gigabyte" << endl;
     cout << "Used Size: " <<  setprecision(2) << getUsage() << " Gigabyte" << endl;
     cout << "Free Size: " << setprecision(2) <<  getFree() << " Gigabyte" << endl;
 }
-
 void Disk::getUsageInfo(){
     cout << "Disk";
     ifstream partitions("/proc/partitions");
