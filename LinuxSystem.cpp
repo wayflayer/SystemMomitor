@@ -76,7 +76,7 @@ void CPU::showStatus(){
 Memory::Memory(const string& Mem) : SystemComponent(Mem), total(0.0), usage(0.0), free(0.0) {
         getMemInfo();
         usage = getUsageInfo();
-        free = total - usage; // Изменил расчет free
+        free = total - usage;
     }
 
 string Memory::getMemInfo() {
@@ -89,20 +89,20 @@ string Memory::getMemInfo() {
                 istringstream iss(line);
                 string key, value;
                 iss >> key >> value;
-                total = stod(value) / 1024 / 1024; //  Добавил деление на 1024/1024 
+                total = stod(value) / 1024 / 1024; 
             } 
             else if (line.find("MemFree") != string::npos) {
             istringstream iss(line);
              string key, value;
             iss >> key >> value;
-            free = stod(value) / 1024 / 1024; //  Добавил деление на 1024/1024 
+            free = stod(value) / 1024 / 1024; 
         }
     }
     return memInfo;
 }
 
 double Memory::getUsageInfo() {
-    usage = (total - free); // Изменил расчет usage 
+    usage = (total - free);
     return usage;
 }
 
