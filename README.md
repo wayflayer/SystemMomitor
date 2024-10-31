@@ -1,6 +1,5 @@
 # SystemMonitor pet-project
 
-<<<<<<< HEAD
 Simple Linux-system monitor (V. 0.01) - 30.10.2024
 
 the output reads:
