@@ -64,7 +64,6 @@ private:
     string Hostname;
     string ip;
     string interface;
-    void getNetInfo();
 public:
     Net(const string& Net);
     string getHost() const;

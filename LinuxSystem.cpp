@@ -1,4 +1,5 @@
 #include "SystemComponent.h"
+#include <cstdio>
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -10,6 +11,7 @@
 #include <netdb.h>
 #include <sys/utsname.h>
 #include <ifaddrs.h>
+#include <sys/utsname.h>
 
 using namespace std;
 
@@ -84,7 +86,8 @@ string Memory::getMemInfo() {
         string line;
         string memInfo;
 
-        while (getline(meminfo, line)) {
+
+    while (getline(meminfo, line)) {
             if (line.find("MemTotal") != string::npos) {
                 istringstream iss(line);
                 string key, value;
@@ -102,7 +105,11 @@ string Memory::getMemInfo() {
 }
 
 double Memory::getUsageInfo() {
+<<<<<<< HEAD
     usage = (total - free);
+=======
+    usage = (total - free); 
+>>>>>>> fccd3ad (thied commit)
     return usage;
 }
 
@@ -161,10 +168,78 @@ void Disk::showStatus(){
     cout << getName() << endl;
 }
 
+Net::Net(const string& Net):
+SystemComponent(Net),
+Hostname(""),
+ip(""),
+interface("")
+{
+    Hostname = getHost();
+    ip = getIp();
+    interface = getInterface();
+}
+
+string Net::getHost() const{
+   struct utsname buf;
+    if (uname(&buf) == 0){
+        cout << "hostname: " << buf.nodename << endl;
+    } else{
+        cerr << "get hostname error" << endl;
+        return "close";
+    }
+    return "";
+}
+
+string Net::getIp() const {
+    string command = "curl ifcongig.me";
+    FILE *pipe = popen(command.c_str(), "r");
+    if (pipe == nullptr){
+        cerr << "command execute error" << endl; 
+    }
+    char buffer[128];
+    string ipAddress;
+    while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
+        ipAddress = buffer;
+    }
+
+    pclose(pipe);
+    ipAddress.erase(ipAddress.find_last_not_of(" \n\r\t") + 1); 
+    return ipAddress;
+}
+
+string Net::getInterface() const{
+    string command = "ifconfig";
+    FILE* pipe = popen(command.c_str(), "r");
+    if (pipe == nullptr) {
+        cerr << "command execute error: " << command << endl;
+        return "close"; 
+    }
+
+    char buffer[1024];
+    while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
+        cout << buffer; 
+    }
+
+    pclose(pipe); 
+    return "";
+}
+
+void Net::showStatus(){
+    cout << endl;
+    cout << getName() << endl;
+    cout << getHost() << endl;
+    cout <<  getIp() << endl;
+    cout << getInterface() << endl;
+}
+
 int main(){
     CPU cpu("cpu");
     Memory ram("ram");
     Disk disk("disk");
+    Net net("net");
     cpu.showStatus();
     ram.showStatus();
+    net.showStatus();
 }
+
+
