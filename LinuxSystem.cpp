@@ -167,13 +167,8 @@ void Disk::showStatus(){
 Net::Net(const string& Net):
 SystemComponent(Net),
 Hostname(""),
-ip(""),
 interface("")
-{
-    Hostname = getHost();
-    ip = getIp();
-    interface = getInterface();
-}
+{}
 
 string Net::getHost() const{
    struct utsname buf;
@@ -184,23 +179,6 @@ string Net::getHost() const{
         return "close";
     }
     return "";
-}
-
-string Net::getIp() const {
-    string command = "curl ifcongig.me";
-    FILE *pipe = popen(command.c_str(), "r");
-    if (pipe == nullptr){
-        cerr << "command execute error" << endl; 
-    }
-    char buffer[128];
-    string ipAddress;
-    while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
-        ipAddress = buffer;
-    }
-
-    pclose(pipe);
-    ipAddress.erase(ipAddress.find_last_not_of(" \n\r\t") + 1); 
-    return ipAddress;
 }
 
 string Net::getInterface() const{
@@ -224,7 +202,6 @@ void Net::showStatus(){
     cout << endl;
     cout << getName() << endl;
     cout << getHost() << endl;
-    cout <<  getIp() << endl;
     cout << getInterface() << endl;
 }
 
