@@ -158,11 +158,9 @@ double Disk::getTotal(){
 
 string Disk::getDisk() const {
     return DiskName;
-}
+} 
 
-void Disk::showStatus(){
-    cout << getName() << endl;
-}
+void Disk::showStatus(){}
 
 Net::Net(const string& Net):
 SystemComponent(Net),
@@ -198,21 +196,10 @@ string Net::getInterface() const{
     return "";
 }
 
+
 void Net::showStatus(){
     cout << endl;
     cout << getName() << endl;
     cout << getHost() << endl;
     cout << getInterface() << endl;
 }
-
-int main(){
-    CPU cpu("cpu");
-    Memory ram("ram");
-    Disk disk("disk");
-    Net net("net");
-    cpu.showStatus();
-    ram.showStatus();
-    net.showStatus();
-}
-
-

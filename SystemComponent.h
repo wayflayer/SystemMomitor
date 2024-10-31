@@ -55,7 +55,7 @@ private:
 public:
     Disk(const string& Disk);
     string getDisk() const;
-    double getTotal();
+    double getTotal(); 
     void showStatus();
 };
 
