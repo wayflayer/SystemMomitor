@@ -105,11 +105,7 @@ string Memory::getMemInfo() {
 }
 
 double Memory::getUsageInfo() {
-<<<<<<< HEAD
     usage = (total - free);
-=======
-    usage = (total - free); 
->>>>>>> fccd3ad (thied commit)
     return usage;
 }
 
