@@ -62,12 +62,10 @@ public:
 class Net:public SystemComponent{
 private:
     string Hostname;
-    string ip;
     string interface;
 public:
     Net(const string& Net);
     string getHost() const;
-    string getIp() const;
     string getInterface() const;
     void showStatus();
 };
